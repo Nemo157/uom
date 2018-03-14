@@ -21,7 +21,9 @@ coveralls = { repository = "iliekturtles/uom" }
 maintenance = { status = "actively-developed" }
 
 [dependencies]
-num = "0.1"
+num-traits = { version = "0.2", default-features = false }
+num-rational = { git = "https://github.com/rust-num/num-rational", optional = true, default-features = false }
+num-bigint = { git = "https://github.com/rust-num/num-bigint", optional = true, default-features = false }
 serde = { version = "1.0", optional = true, default-features = false }
 typenum = "1.9"
 
@@ -33,31 +35,34 @@ static_assertions = "0.2"
 
 [features]
 default = ["f32", "f64", "si", "std"]
-usize = []
-u8 = []
-u16 = []
-u32 = []
-u64 = []
-isize = []
-i8 = []
-i16 = []
-i32 = []
-i64 = []
-bigint = []
-biguint = []
-rational = []
-rational32 = []
-rational64 = []
-bigrational = []
+usize = ["rational-support"]
+u8 = ["rational-support"]
+u16 = ["rational-support"]
+u32 = ["rational-support"]
+u64 = ["rational-support"]
+isize = ["rational-support"]
+i8 = ["rational-support"]
+i16 = ["rational-support"]
+i32 = ["rational-support"]
+i64 = ["rational-support"]
+bigint = ["bigint-support"]
+biguint = ["bigint-support"]
+rational = ["rational-support"]
+rational32 = ["rational-support"]
+rational64 = ["rational-support"]
+bigrational = ["bigint-support"]
 f32 = []
 f64 = []
 si = []
-std = []
+std = ["num-traits/std"]
 # The `use_serde` feature exists so that, in the future, other dependency features like num/serde
 # can be added. However, num/serde is currently left out because it has not yet been updated to
 # Serde 1.0. It is also necessary to name the feature something other than `serde` because of a
 # cargo bug: https://github.com/rust-lang/cargo/issues/1286
 use_serde = ["serde"]
+# Internal features to include appropriate num-* crates.
+rational-support = ["num-rational"]
+bigint-support = ["num-bigint", "num-rational/bigint"]
 
 [[example]]
 name = "base"

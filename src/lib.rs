@@ -168,7 +168,15 @@ compile_error!("A least one underlying storage type must be enabled. See the fea
     uom documentation for available underlying storage type options.");
 
 #[doc(hidden)]
-pub extern crate num;
+pub extern crate num_traits;
+
+#[doc(hidden)]
+#[cfg(feature = "bigint-support")]
+pub extern crate num_bigint;
+
+#[doc(hidden)]
+#[cfg(any(feature = "rational-support", feature = "bigint-support"))]
+pub extern crate num_rational;
 
 #[doc(hidden)]
 #[cfg(feature = "serde")]
@@ -207,6 +215,31 @@ pub mod lib {
         #[cfg(feature = "std")]
         pub use std::ops::*;
         pub use typenum::type_operators::*;
+    }
+}
+
+// Conditionally import num sub-crate types based on feature selection.
+#[doc(hidden)]
+pub mod num {
+    #[cfg(not(feature = "std"))]
+    pub use num_traits::float::FloatCore as Float;
+    #[cfg(feature = "std")]
+    pub use num_traits::float::Float;
+
+    pub use num_traits::{FromPrimitive, Num, One, pow, Saturating, Signed, Zero};
+
+    #[cfg(feature = "bigint-support")]
+    pub use num_bigint::{BigInt, BigUint};
+
+    #[cfg(feature = "rational-support")]
+    pub use num_rational::Rational;
+
+    #[cfg(feature = "bigint-support")]
+    pub use num_rational::BigRational;
+
+    #[cfg(any(feature = "rational-support", feature = "bigint-support"))]
+    pub mod rational {
+        pub use num_rational::*;
     }
 }
 
@@ -288,7 +321,7 @@ storage_types! {
     impl ::ConversionFactor<V> for V {
         #[inline(always)]
         fn powi(self, e: i32) -> Self {
-            self.powi(e)
+            <V as ::num::Float>::powi(self, e)
         }
 
         #[inline(always)]
