@@ -37,10 +37,10 @@ quantity! {
         @zeptosecond: prefix!(zepto); "zs", "zeptosecond", "zeptoseconds";
         @yoctosecond: prefix!(yocto); "ys", "yoctosecond", "yoctoseconds";
 
-        @day: 8.64_E4; "d", "day", "days";
-        @hour: 3.6_E3; "h", "hour", "hours";
-        @minute: 6.0_E1; "min", "minute", "minutes";
-        @shake: 1.0_E-8; "10.0 ns", "shake", "shakes";
-        @year: 3.1536_E7; "a", "year", "years";
+        @day: (86400, 1); "d", "day", "days";
+        @hour: (3600, 1); "h", "hour", "hours";
+        @minute: (60, 1); "min", "minute", "minutes";
+        @shake: (1, 100_000_000); "10.0 ns", "shake", "shakes";
+        @year: (31536000, 1); "a", "year", "years";
     }
 }

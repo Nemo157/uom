@@ -147,7 +147,10 @@ macro_rules! quantity {
 
                 #[inline(always)]
                 fn conversion() -> Self::T {
-                    $conversion
+                    let (numerator, denominator) = $conversion;
+                    let numerator: Self::T = numerator as Self::T;
+                    let denominator: Self::T = denominator as Self::T;
+                    numerator / denominator
                 }
             }
 
@@ -162,9 +165,8 @@ macro_rules! quantity {
 
                 #[inline(always)]
                 fn conversion() -> Self::T {
-                    use $crate::num::FromPrimitive;
-
-                    Self::T::from_f64($conversion).unwrap()
+                    let (numerator, denominator) = $conversion;
+                    Self::T::new(numerator, denominator)
                 }
             }
 
@@ -179,14 +181,8 @@ macro_rules! quantity {
 
                 #[inline(always)]
                 fn conversion() -> Self::T {
-                    use $crate::num::FromPrimitive;
-
-                    let c = $crate::num::rational::Ratio::<$crate::num::BigInt>::from_f64(
-                            $conversion)
-                        .unwrap();
-
-                    Self::T::new(c.numer().to_biguint().unwrap(),
-                        c.denom().to_biguint().unwrap())
+                    let (numerator, denominator) = $conversion;
+                    Self::T::new(numerator, denominator)
                 }
             }
 
@@ -201,9 +197,8 @@ macro_rules! quantity {
 
                 #[inline(always)]
                 fn conversion() -> Self::T {
-                    use $crate::num::FromPrimitive;
-
-                    Self::T::from_f64($conversion).unwrap()
+                    let (numerator, denominator) = $conversion;
+                    Self::T::new(numerator, denominator)
                 }
             }
 
